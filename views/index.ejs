@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title><%= title %></title>
+    <link rel='stylesheet' href='/stylesheets/style.css' />
+    <script src="https://www.google.com/recaptcha/enterprise.js?render=請填寫你的 PROJECT_ID"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+  </head>
+  <body>
+    <h1> reCAPTCHA Test </h1>
+    <form>
+      <button onclick="onClick(event)">Submit</button>
+    </form>
+
+    <script>
+      function onClick(e) {
+        e.preventDefault();
+        grecaptcha.enterprise.ready(async () => {
+          const action = 'LOGIN';
+          const token = await grecaptcha.enterprise.execute('請填寫你的 PROJECT_ID', {action});
+          console.log(token);
+
+          axios.post('/recaptcha', {
+            recaptchaToken: token,
+            action
+          })
+            .then(res => console.log(res))
+            .catch(err => console.error(err));
+        });
+      }
+    </script>
+  </body>
+</html>
